@@ -1,0 +1,35 @@
+$sourceFolder = "C:\Users\Abdulrahman\Desktop\oo\behaviours\fights"
+$destinationFolder = "C:\Users\Abdulrahman\Desktop\oo\behaviours\fights\moved"
+
+# إنشاء المجلد الوجهة إذا لم يكن موجودًا
+if (-not (Test-Path $destinationFolder)) {
+    New-Item -ItemType Directory -Path $destinationFolder
+}
+
+# قراءة أسماء الملفات من الملف النصي ونقلها
+Get-Content "$sourceFolder\output.txt" | ForEach-Object {
+    $sourceFile = Join-Path $sourceFolder $_
+    $destinationFile = Join-Path $destinationFolder $_
+
+    if (Test-Path $sourceFile) {
+        Move-Item $sourceFile $destinationFile -Force
+        Write-Host "Moved: $sourceFile -> $destinationFile"
+    } else {
+        Write-Host "File not found: $sourceFile"
+    }
+}
+
+---------------------------------------------------------------------------------
+Name Change
+
+$folderPath = "C:\Users\Abdulrahman\Desktop\oo\behaviours\normal" 
+
+Get-ChildItem -Path $folderPath -File | ForEach-Object {
+    $newName = -join ((65..90) + (97..122) | Get-Random -Count 8 | ForEach-Object { [char]$_ }) + $_.Extension
+    Rename-Item -Path $_.FullName -NewName $newName
+    Write-Host "Renamed: $($_.Name) -> $newName"
+}
+---------------------------------------------------------------------------------
+CLIP
+cd clip
+pip install .
